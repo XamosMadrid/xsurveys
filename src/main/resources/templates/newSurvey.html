@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"></div>
+</head>
+<body>
+<div class="container my-2" align="center">
+  <h1>Nuevo cuestionario</h1>
+  <hr>
+  <div class="form">
+  <form action="#" th:action="@{/saveSurvey}" th:object="${survey}"
+        method="POST">
+    <div th:replace="fragments/surveyData"></div>
+
+    <button type="submit" class="btn btn-primary btn-sm mb-3">Crear cuestionario</button>
+  </form>
+  </div>
+  <hr>
+
+  <a th:href="@{/}">Volver a la lista de cuestionarios</a>
+</div>
+</body>
+</html>

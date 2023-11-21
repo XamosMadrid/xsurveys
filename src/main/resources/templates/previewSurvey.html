@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"></div>
+</head>
+<body>
+<div class="container my-2" align="center" th:object="${survey}">
+  <h1 th:text="*{name}"></h1>
+  <hr>
+  <div class="container" align="left">
+    <p th:text="*{description}"></p>
+    <div th:each="question, questionStat:${questions}" class="card mb">
+      <div class="card-body">
+        <h5 class="card-title" th:text="${question.statement}"></h5>
+        <div class="form-check" th:each="option, optionStat:${question.options}">
+          <input type="radio" th:id="'option'+${questionStat.count}+'_'+${optionStat.index}"
+                 th:name="${question.id}" th:value="${option.id}"/>
+          <label class="form-check-label" th:for="'option'+${questionStat.count}+'_'+${optionStat.index}"
+                 th:text="${option.content}"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

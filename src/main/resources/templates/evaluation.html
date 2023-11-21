@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"></div>
+  <script type="application/javascript">
+    function completeEvaluation() {
+      if (!document.getElementById("nameFiller").value) {
+        alert("Debe rellenar el nombre");
+        return;
+      }
+      let formEvaluation = document.forms["evaluation"];
+      let formQuestions = document.forms["questions"];
+      let totalQuestions = parseInt(document.getElementById("totalQuestions").value);
+      let allAnswered = true;
+      for (let idxQuestion = 0; idxQuestion < totalQuestions; idxQuestion++) {
+        let answer = formQuestions["question_" + idxQuestion].value;
+        document.getElementById("answer_" + idxQuestion).value = answer;
+        allAnswered = allAnswered && answer;
+      }
+
+      if (!allAnswered) {
+        alert("Debes contestar todas las preguntas");
+        return;
+      }
+
+      if (confirm("Ya no podrá cambiar las respuestas. ¿Está seguro que desea continuar?")) {
+        document.getElementById("status").value = "ABIERTO";
+        formEvaluation.submit();
+      }
+    }
+  </script>
+</head>
+<body>
+
+<div class="container my-2" align="center" >
+  <h1 th:text="${survey.name}"></h1>
+  <hr>
+  <div class="alert alert-warning" role="alert" th:unless="${survey.getStatus().name() == 'ABIERTO'}">
+    El periodo de evaluación para este cuestionario aún no ha sido abierto
+  </div>
+  <div class="container" align="left" th:unless="${survey.getStatus().name() == 'CREANDO'}">
+    <p th:text="${survey.description}"></p>
+
+    <div class="alert alert-success" role="alert" th:if="${evaluation.getStatus().name() == 'CERRADO'}">
+      Las respuestas han sido enviadas con &eacute;xito
+    </div>
+
+    <form name="evaluation" th:action="@{/completeEvaluation}" th:object="${evaluation}" method="POST">
+      <input type="hidden" th:field="*{id}">
+      <input type="hidden" th:field="*{idSurvey}">
+      <input type="hidden" th:field="*{permalink}">
+      <input type="hidden" th:field="*{status}">
+
+      <div class="form-group col-8">
+        <label for="nameFiller">Nombre</label>
+        <input type="text"
+               th:readonly="${evaluation.getStatus().name() == 'CERRADO'}"
+               class="form-control" id="nameFiller"
+               placeholder="Escribe aquí tu nombre"
+               th:field="*{nameFiller}" required/>
+      </div>
+      <input type="hidden" id="totalQuestions" th:value="${questions.size()}">
+
+      <div th:each="answer,answerStat:*{answers}">
+        <input type="hidden" th:field="${evaluation.answers[__${answerStat.index}__].id}">
+        <input type="hidden" th:field="${evaluation.answers[__${answerStat.index}__].idQuestion}">
+        <input type="hidden" th:field="${evaluation.answers[__${answerStat.index}__].idEvaluation}">
+        <input type="hidden" th:field="${evaluation.answers[__${answerStat.index}__].idQuestionOption}"
+               th:id="'answer_'+${answerStat.index}">
+      </div>
+    </form>
+
+    <form name="questions" method="POST">
+      <div th:each="question, questionStat:${questions}" class="card mb">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${question.statement}"></h5>
+          <div class="form-check" th:each="option, optionStat:${question.options}">
+            <input type="radio" th:id="'option_'+${questionStat.count}+'_'+${optionStat.index}"
+                   th:disabled="${evaluation.getStatus().name() == 'CERRADO'}"
+                   th:name="'question_' + ${questionStat.index}" th:value="${option.id}"
+            th:checked="${option.getId().equals(evaluation.getAnswers().get(questionStat.index).getIdQuestionOption())}"/>
+            <label class="form-check-label" th:for="'option'+${questionStat.count}+'_'+${optionStat.index}"
+                   th:text="${option.content}"></label>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <button type="button" onclick="completeEvaluation()" class="btn btn-primary btn-sm mb-3"
+            th:if="${evaluation.getStatus().name() == 'ABIERTO'}">Enviar resultados
+    </button>
+  </div>
+</div>
+</body>
+</html>

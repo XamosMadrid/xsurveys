@@ -1,0 +1,27 @@
+<input type="hidden" th:field="*{idSurvey}">
+<input type="hidden" th:field="*{order}">
+
+<div class="form-group col-8">
+  <label for="statement">Enunciado</label>
+  <textarea rows="3" class="form-control" th:field="*{statement}" id="statement"
+            placeholder="Escribe un enunciado para la pregunta" required></textarea>
+</div>
+
+<table class="table table-responsive-sm">
+  <thead>
+  <tr>
+    <th colspan="2">Posibles respuestas</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="questionOption, itemStat : *{options}">
+    <td class="col-sm-1" th:text="${itemStat.index + 1}"></td>
+    <td>
+      <input type="hidden" th:field="*{options[__${itemStat.index}__].id}" />
+      <input type="hidden" th:field="*{options[__${itemStat.index}__].idQuestion}" />
+      <textarea rows="2" class="form-control" th:field="*{options[__${itemStat.index}__].content}"
+                required></textarea>
+    </td>
+  </tr>
+  </tbody>
+</table>

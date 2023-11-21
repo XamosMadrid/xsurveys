@@ -1,0 +1,19 @@
+version: '1.0'
+services:
+  mysql:
+    image: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: xsurveys
+      MYSQL_USER: sergio
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: adminpass
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - "mysql_data:/data"
+volumes:
+  mysql_data:

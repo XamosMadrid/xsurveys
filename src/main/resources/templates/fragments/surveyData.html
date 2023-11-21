@@ -1,0 +1,12 @@
+<div class="form-group col-8">
+  <label for="name">Nombre</label>
+  <input type="text" class="form-control" id="name"
+         placeholder="Escribe un nombre para el cuestionario"
+         th:field="*{name}" required/>
+</div>
+
+<div class="form-group col-8">
+  <label for="description">Descripci&oacute;n</label>
+  <textarea rows="3" class="form-control" th:field="*{description}" id="description"
+            placeholder="Escribe una descripci&oacute;n para el cuestionario" required></textarea>
+</div>

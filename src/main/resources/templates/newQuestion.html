@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header"></div>
+</head>
+<body>
+<div class="container my-2" align="center">
+  <h1>Nueva pregunta</h1>
+  <hr>
+  <div class="form">
+  <form action="#" th:action="@{/saveQuestion}" th:object="${question}"
+        method="POST">
+    <div th:replace="fragments/questionData"></div>
+
+    <button type="submit" class="btn btn-primary btn-sm mb-3">Crear pregunta</button>
+  </form>
+  </div>
+  <hr>
+
+  <a th:href="@{/showFormUpdateSurvey/{id}(id=${question.idSurvey})}">Volver a la edici&oacute;n del cuestionario</a>
+</div>
+</body>
+</html>
