@@ -19,14 +19,6 @@ public class App {
 			System.out.println("########################################################################");
 			System.out.println("################# XSurveys by Sergio Palacios started ##################");
 			System.out.println("########################################################################");
-			/* System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-
-			String[] beanNames = ctx.getBeanDefinitionNames();
-			Arrays.sort(beanNames);
-			for (String beanName : beanNames) {
-				System.out.println(beanName);
-			}*/
 		};
 	}
 
